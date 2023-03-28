@@ -58,38 +58,46 @@ void loop() {
         if (usb == '1')
         {
             actuate(south, 100);
-            delay(1000);
-            actuate(south, -100);
         }
         else if (usb == '2')
         {
             actuate(east, 100);
-            delay(1000);
-            actuate(east, -100);
         }
         else if (usb == '3')
         {
             actuate(west, 100);
-            delay(1000);
-            actuate(west, -100);
         }
         else if (usb == '4')
         {
             actuate(north, 100);
-            delay(1000);
-            actuate(north, -100);
         }
         else if (usb == '5')
         {
             actuate(centre, 100);
-            delay(1000);
-            actuate(centre, -100);
         }
         else if (usb == '6')
         {
             actuate(north, 150);
-            delay(1000);
-            actuate(north, -150);
+        }
+        else if (usb == '7')
+        {
+            actuate(south, 0);
+        }
+        else if (usb == '8')
+        {
+            actuate(east, 0);
+        }
+        else if (usb == '9')
+        {
+            actuate(west, 0);
+        }
+        else if (usb == 'a')
+        {
+            actuate(north, 0);
+        }
+        else if (usb == 'b')
+        {
+            actuate(centre, 0);
         }
   }
 }

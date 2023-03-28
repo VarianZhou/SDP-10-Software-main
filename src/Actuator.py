@@ -41,13 +41,19 @@ class Motor(Actuator):
             self.ser.write(chr(self.getId()).encode())
         if angle == 150:
             self.ser.write('6'.encode())
-        self.__state += angle
+        if angle == 0:
+            instruction = self.getId()+6
+            if instruction == 10:
+                instruction = 'a'
+            if instruction == 11:
+                instruction = 'b'
+            self.ser.write(chr(instruction).encode())
+        self.__state = angle
         return True
 
     def restore(self):
         '''
         Restore the motor to its initial state, the angle should be 0
         '''
-        self.execute(-self.__state)
-        self.__state = self.__initial_state
+        self.execute(0)
         return True

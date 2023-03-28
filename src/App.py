@@ -80,8 +80,8 @@ def main():
     center_actuator = Motor('Center Actuator',5)
 
     # We define the sensor and task lists
-    sensors = [motor_sensor1, motor_sensor2, motor_sensor3, motor_sensor4, motor_sensor5, motor_sensor6]
-    actuators = [south_actuator, east_actuator, west_actuator, north_actuator, center_actuator, motor_actuator6]
+    sensors = [motor_sensor1, motor_sensor2, motor_sensor3, motor_sensor4, motor_sensor5]
+    actuators = [south_actuator, east_actuator, west_actuator, north_actuator, center_actuator]
     # parameters1 = [180, 180,180,180,180,180,180,180,180]
 
     controller = Controller(output, stack_sensor, camera, actuators, sensors)

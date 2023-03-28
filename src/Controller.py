@@ -122,9 +122,8 @@ class Controller:
         '''
         Restore the machine to its initial state
         '''
-        # for motor in self.__motors:
-        #     motor.restore()
-        pass
+        for motor in self.__motors:
+            motor.restore()
 
     def check_battery_condition(self):
         # TODO:implement the method to detect the power left in the battery
@@ -134,15 +133,8 @@ class Controller:
         else:
             self.__alert.alertUser(AlertType.LOW_BATTERY)
 
-    '''Add a task to the queue'''
-    #
-    # def create_Task(self, task: Task):
-    #     self.__currentTask = task
-
 
     # These methods are imported from the Monitor class in the monitor system directly
-
-
     '''Monitor the process of the task at the head of the queue'''
 
     def monitor_the_task(self):
@@ -219,7 +211,3 @@ class Controller:
                         self.__alert.alertUser(AlertType.UNKNOWN_CLOTHING)
                 else:
                     self.__alert.alertUser(AlertType.NO_CLOTHING)
-
-
-# 1. Ask Garry about the information of the bulbs and beepers
-# 2.
