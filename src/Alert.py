@@ -4,7 +4,7 @@ Author: Julia Turner
 Date: 2nd February 2023
 """
 from AlertType import AlertType
-
+import serial
 
 class Alert:
 
