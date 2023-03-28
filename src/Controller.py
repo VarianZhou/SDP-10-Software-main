@@ -22,18 +22,23 @@ from queue import *
 # define some constants, a list of numbers
 
 # The success criteria of rotating a motor for 180 degrees
-motor_180_criteria = Motor_Criteria((170,190))
+motor_100_criteria = Motor_Criteria((90,110))
+motor_150_criteria = Motor_Criteria((140,160))
 # The set of sensors that will be used for the Tshirt folding task
-TSHIRT_SENSOR_SET = [1,3,8,5]
+TSHIRT_SENSOR_SET = [1,2,3,5,4]
 # The set of motors that will be used for the Tshirt folding task
-TSHIRT_MOTOR_SET = [1,3,8,5]
+TSHIRT_MOTOR_SET = [1,2,3,5,4]
 # Angles we expect the motors to rotate
-TSHIRT_ANGLE_SET = [180,180,180,180]
-SLEEVE_SENSOR_SET = [1,3,8,5]
-SLEEVE_MOTOR_SET = [1,3,8,5]
-SLEEVE_ANGLE_SET = [180,180,180,180]
-
-
+TSHIRT_ANGLE_SET = [100,100,100,100,150]
+TSHIRT_CRITERIA_SET = [motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_150_criteria]
+SLEEVE_SENSOR_SET = [1,2,3,2,3,5,4]
+SLEEVE_MOTOR_SET = [1,2,3,2,3,5,4]
+SLEEVE_ANGLE_SET = [100,100,100,100,100,100,150]
+SLEEVE_CRITERIA_SET = [motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_150_criteria]
+TROUSER_SENSOR_SET = [5,2,3,4]
+TROUSER_MOTOR_SET = [5,2,3,4]
+TROUSER_ANGLE_SET = [100,100,100,150]
+TROUSER_CRITERIA_SET = [motor_100_criteria,motor_100_criteria,motor_100_criteria,motor_150_criteria]
 
 class Controller:
 
@@ -78,7 +83,8 @@ class Controller:
         sensors = self.__map_get(self.__motor_sensors, TSHIRT_SENSOR_SET)
         actuators = self.__map_get(self.__motors, TSHIRT_MOTOR_SET)
         parameters = TSHIRT_ANGLE_SET
-        criteria = [motor_180_criteria] * len(sensors)
+        criteria = TSHIRT_CRITERIA_SET
+        # criteria = [motor_180_criteria] * len(sensors)
         self.__currentTask = Task(sensors, actuators, parameters, criteria)
         # self.__monitor.add_task(task)
 
@@ -89,7 +95,7 @@ class Controller:
         sensors = self.__map_get(self.__motor_sensors, SLEEVE_SENSOR_SET)
         actuators = self.__map_get(self.__motors, SLEEVE_MOTOR_SET)
         parameters = SLEEVE_ANGLE_SET
-        criteria = [motor_180_criteria] * len(sensors)
+        criteria = SLEEVE_CRITERIA_SET
         # create a new task and assign it to the monitor
         self.__currentTask = Task(sensors, actuators, parameters, criteria)
         # self.__monitor.add_task(task)
@@ -98,7 +104,12 @@ class Controller:
         '''
         This function actuates panels to fold trousers
         '''
-        self.__createFoldingTshirtTask()
+        sensors = self.__map_get(self.__motor_sensors, TROUSER_SENSOR_SET)
+        actuators = self.__map_get(self.__motors, TROUSER_MOTOR_SET)
+        parameters = TROUSER_ANGLE_SET
+        criteria = TROUSER_CRITERIA_SET
+        # create a new task and assign it to the monitor
+        self.__currentTask = Task(sensors, actuators, parameters, criteria)
 
     def __receive_input(self) -> InputType:
         '''
@@ -207,3 +218,7 @@ class Controller:
                         self.__alert.alertUser(AlertType.UNKNOWN_CLOTHING)
                 else:
                     self.__alert.alertUser(AlertType.NO_CLOTHING)
+
+
+# 1. Ask Garry about the information of the bulbs and beepers
+# 2.

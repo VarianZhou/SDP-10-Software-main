@@ -72,26 +72,16 @@ def main():
     motor_sensor3 = Motor_Sensor('Motor Sensor 3', msg3, int)
     motor_sensor4 = Motor_Sensor('Motor Sensor 4', msg4, int)
     motor_sensor5 = Motor_Sensor('Motor Sensor 5', msg5, int)
-    motor_sensor6 = Motor_Sensor('Motor Sensor 6', msg6, int)
-    motor_sensor7 = Motor_Sensor('Motor Sensor 7', msg7, int)
-    motor_sensor8 = Motor_Sensor('Motor Sensor 8', msg8, int)
-    motor_sensor9 = Motor_Sensor('Motor Sensor 9', msg9, int)
 
-    motor_actuator1 = Motor('Motor Actuator 1',1)
-    motor_actuator2 = Motor('Motor Actuator 2',2)
-    motor_actuator3 = Motor('Motor Actuator 2',3)
-    motor_actuator4 = Motor('Motor Actuator 2',4)
-    motor_actuator5 = Motor('Motor Actuator 2',5)
-    motor_actuator6 = Motor('Motor Actuator 2',6)
-    motor_actuator7 = Motor('Motor Actuator 2',7)
-    motor_actuator8 = Motor('Motor Actuator 2',8)
-    motor_actuator9 = Motor('Motor Actuator 2',9)
+    south_actuator = Motor('South Actuator',1)
+    east_actuator = Motor('East Actuator',2)
+    west_actuator = Motor('West Actuator',3)
+    north_actuator = Motor('North Actuator',4)
+    center_actuator = Motor('Center Actuator',5)
 
     # We define the sensor and task lists
-    sensors = [motor_sensor1, motor_sensor2, motor_sensor3, motor_sensor4, motor_sensor5, motor_sensor6, motor_sensor7,
-               motor_sensor8, motor_sensor9]
-    actuators = [motor_actuator1, motor_actuator2, motor_actuator3, motor_actuator4, motor_actuator5, motor_actuator6,
-                 motor_actuator7, motor_actuator8, motor_actuator9]
+    sensors = [motor_sensor1, motor_sensor2, motor_sensor3, motor_sensor4, motor_sensor5, motor_sensor6]
+    actuators = [south_actuator, east_actuator, west_actuator, north_actuator, center_actuator, motor_actuator6]
     # parameters1 = [180, 180,180,180,180,180,180,180,180]
 
     controller = Controller(output, stack_sensor, camera, actuators, sensors)

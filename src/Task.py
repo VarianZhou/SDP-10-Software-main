@@ -1,5 +1,4 @@
 
-
 '''Each task should be done'''
 ''' 
     Note that the tasks are assumed to be done in a sequential manner, they will be done one by one. Our process is that

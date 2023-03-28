@@ -3,7 +3,7 @@ Program: Actuator Class
 Author: Hongliang Zhou
 Date: 18th March 2023
 """
-
+import serial
 class Actuator():
     '''
     The Actuator class is a real HW device that could perform a particular task, e.g. like motor rotating for a
@@ -27,15 +27,17 @@ class Actuator():
         return True
 
 class Motor(Actuator):
-    def __init__(self,name:str, id:int):
+    def __init__(self,name:str, id:int, port = '/dev/ttyAcM0', baud_rate = 9600):
         super().__init__(name,id)
         self.__state = 0
         self.__initial_state = 0
+        self.ser = serial.Serial(port, baud_rate)
+        self.ser.reset_input_buffer()
 
 
     def execute(self, angle):
-        # TODO: Using the code from HW team to rotate the motor for a certain degree.
         # The state is updated
+        self.ser.write((chr(self.getId()) + ' ' + str(angle)).encode())
         self.__state += angle
         return True
 
