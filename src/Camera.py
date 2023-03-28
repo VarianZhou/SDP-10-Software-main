@@ -3,11 +3,11 @@ Program: Sensor Class
 Author: Julia Turner, Hongliang Zhou
 Date: 3rd February 2023
 """
-
+import draft
 from ClothingType import ClothingType
 
 class Camera:
-    
+
     def __init__(self, sensor_ID):
         '''
         Constructor for the Sensor class which controls all the input for the machine.
@@ -20,16 +20,23 @@ class Camera:
             :return: bool value of whether clothing is on the board.
         '''
         #TODO: get in clothes sensing data
-        if ("clothes_sense" == True):
-            return True
+        if (draft.return_clothe_type() == "Empty"):
+            return False
         return True
-        #TODO: have it return the category 
+        #TODO: have it return the category
 
     def getItemOnBoard(self) -> ClothingType:
         '''
             Identify the type of the item of clothing on the board
         '''
-        return ClothingType.TSHIRT
+        Cloth_Type = draft.return_clothe_type();
+        if Cloth_Type == 'Longsleeve' :
+            return ClothingType.LONG_SLEEVED_SHIRT
+        if Cloth_Type == 'Pants' :
+            return ClothingType.TROUSERS
+        if Cloth_Type == 'T-Shirt' :
+            return ClothingType.TSHIRT
+        return ClothingType.OTHER
 
     def isItemCoveringSides(self) -> bool:
         '''
@@ -45,5 +52,4 @@ class Camera:
         return False
 
     def handDetected(self):
-        # TODO: detect if hands are on the panels
-        return False
+        return draft.is_hand_detected();

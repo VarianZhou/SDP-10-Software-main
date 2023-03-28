@@ -4,6 +4,8 @@
 //Website:www.primerobotics.in
 //2015.5.7
 #include <LiquidCrystal.h>// include the library code
+#include "rgb_lcd.h"
+
 /**********************************************************/
 char array1[]="Laundry Done              ";  //the string to print on the LCD
 char array2[]="Stacks Full               ";//the string to print on the LCD
@@ -17,32 +19,71 @@ char array9[]="Task Failed               ";
 
 int tim = 500;  //the value of delay time
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(4, 6, 10, 11, 12, 13);
+//LiquidCrystal lcd(4, 6, 10, 11, 12, 13);
 /*********************************************************/
+//include the rgb_lcd library
+
+//assign name lcd to rgb_lcd
+rgb_lcd lcd;
+
 void setup()
 {
-  lcd.begin(16, 2);  // set up the LCD's number of columns and rows:
+    // set up the LCD's number of columns and rows:
+    lcd.begin(16, 2);
+    // Print Hello, World! to the LCD.
+    lcd.print("Hello, World!");
+    delay(1000);
 }
 /*********************************************************/
 void loop()
 {
-    lcd.setCursor(15,0);  // set the cursor to column 15, line 0
-
-
-    for ( int positionCounter1 = 0; positionCounter1 < 26; positionCounter1++)
-    {
-      lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
-      lcd.print(array1[positionCounter1]);  // Print a message to the LCD.
-      delay(tim);  //wait for 250 ms
+    lcd.setCursor(16, 2);
+//    lcd.setCursor(15,0);  // set the cursor to column 15, line 0
+    char usb = Serial.read();
+    if (usb == '1'){
+        message = array1
     }
-    lcd.clear();  //Clears the LCD screen and positions the cursor in the upper-left corner.
-    lcd.setCursor(15,1);  // set the cursor to column 15, line 1
-    for (int positionCounter2 = 0; positionCounter2 < 26; positionCounter2++)
-    {
-      lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
-      lcd.print(array2[positionCounter2]);  // Print a message to the LCD.
-      delay(tim);  //wait for 250 ms
+    if (usb == '2'){
+        message = array2
     }
-    lcd.clear();  //Clears the LCD screen and positions the cursor in the upper-left corner.
+    if (usb == '3'){
+        message = array3
+    }
+    if (usb == '4'){
+        message = array4
+    }
+    if (usb == '5'){
+        message = array5
+    }
+    if (usb == '6'){
+        message = array6
+    }
+    if (usb == '7'){
+        message = array7
+    }
+    if (usb == '8'){
+        message = array8
+    }
+    if (usb == '9'){
+        message = array9
+    }
+
+    if (Serial.available() > 0) {
+        for ( int positionCounter = 0; positionCounter < 26; positionCounter++)
+        {
+          lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
+          lcd.print(message[positionCounter]);  // Print a message to the LCD.
+          delay(tim);  //wait for 250 ms
+        }
+//        lcd.clear();  //Clears the LCD screen and positions the cursor in the upper-left corner.
+//        lcd.setCursor(15,1);  // set the cursor to column 15, line 1
+//        for (int positionCounter2 = 0; positionCounter2 < 26; positionCounter2++)
+//        {
+//          lcd.scrollDisplayLeft();  //Scrolls the contents of the display one space to the left.
+//          lcd.print(array2[positionCounter2]);  // Print a message to the LCD.
+//          delay(tim);  //wait for 250 ms
+//        }
+//        lcd.clear();  //Clears the LCD screen and positions the cursor in the upper-left corner.
+    }
 }
 /************************************************************/
