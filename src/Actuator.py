@@ -37,7 +37,10 @@ class Motor(Actuator):
 
     def execute(self, angle):
         # The state is updated
-        self.ser.write((chr(self.getId()) + ' ' + str(angle)).encode())
+        if angle == 100:
+            self.ser.write(chr(self.getId()).encode())
+        if angle == 150:
+            self.ser.write('6'.encode())
         self.__state += angle
         return True
 

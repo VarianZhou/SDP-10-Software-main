@@ -122,8 +122,9 @@ class Controller:
         '''
         Restore the machine to its initial state
         '''
-        for motor in self.__motors:
-            motor.restore()
+        # for motor in self.__motors:
+        #     motor.restore()
+        pass
 
     def check_battery_condition(self):
         # TODO:implement the method to detect the power left in the battery
