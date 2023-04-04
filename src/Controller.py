@@ -17,6 +17,7 @@ from Sensor import Sensor, Motor_Sensor
 from Task import Task
 from Criteria import Criteria, Motor_Criteria
 from queue import *
+import random
 # import RPI.GPIO as GPIO
 
 # define some constants, a list of numbers
@@ -56,24 +57,27 @@ class Controller:
         self.__motor_sensors = motor_sensors
         self.__currentTask = None
         self.__tolerance = 3
+        self.power_left = 100
+        # For test purpose only
+        self.counter = 0
 
-    def __create_task(self, category) -> None:
+    def __create_task(self, category : ClothingType) -> None:
         '''
         :param:
             category: Clothes enum value
         This method actuates the folding mechanism based on the item's clothing type.
         '''
-        if category == ClothingType.TSHIRT:
+        if category is ClothingType.TSHIRT:
             self.__createFoldingTshirtTask()
-        elif category == ClothingType.LONG_SLEEVED_SHIRT:
+        elif category is ClothingType.LONG_SLEEVED_SHIRT:
             self.__createFoldingLongSLeeveShirtTask()
-        elif category == ClothingType.TROUSERS:
+        elif category is ClothingType.TROUSERS:
             self.__createFoldingTrousersTask()
-        elif category == ClothingType.OTHER:
+        elif category is ClothingType.OTHER:
             pass
 
     def __map_get(self, listOfObjects , indices):
-        return list(map(lambda index: listOfObjects[index], indices))
+        return list(map(lambda index: listOfObjects[index-1], indices))
 
 
     def __createFoldingTshirtTask(self) -> None:
@@ -104,6 +108,7 @@ class Controller:
         '''
         This function actuates panels to fold trousers
         '''
+
         sensors = self.__map_get(self.__motor_sensors, TROUSER_SENSOR_SET)
         actuators = self.__map_get(self.__motors, TROUSER_MOTOR_SET)
         parameters = TROUSER_ANGLE_SET
@@ -115,8 +120,24 @@ class Controller:
         '''
         Detect the input from user
         '''
-        # TODO: functions to receive input from users
-        return InputType.NONE
+        # counter = self.counter
+        # if counter in [1,100,200,357,351,151,161,858,2000,1515,151,616]:
+        #     return InputType.START_RUNNING
+        # if counter in [157,203,355]:
+        #     return InputType.EMERGENCY_EXIT
+        # if counter == 2500:
+        #     return InputType.SHUT_DOWN
+        typs = [0,1,2,3]
+        probs = [.4,.0999,.001,.5]
+        detected = random.choices(typs,probs,k=1)[0]
+        if detected == 0:
+            return InputType.START_RUNNING
+        if detected == 1:
+            return InputType.EMERGENCY_EXIT
+        if detected == 2:
+            return InputType.SHUT_DOWN
+        if detected == 3:
+            return InputType.NONE
 
     def restore(self):
         '''
@@ -127,8 +148,7 @@ class Controller:
 
     def check_battery_condition(self):
         # TODO:implement the method to detect the power left in the battery
-        power_left = 80
-        if power_left > 20:
+        if self.power_left > 20:
             pass
         else:
             self.__alert.alertUser(AlertType.LOW_BATTERY)
@@ -142,6 +162,11 @@ class Controller:
         # get the task in the queue
         task = self.__currentTask
         while True:
+            # in case of hand detected
+            if self.__camera_sensor.handDetected():
+                # In case that hands are detected on the board, the machine should stop running
+                print('Hand was detected on the board')
+                continue
             # in case of failure
             if not self.execute_next_process(task):
                 self.__alert.alertUser(AlertType.TASK_FAILED)
@@ -158,10 +183,6 @@ class Controller:
     def execute_next_process(self, task):
         # We give the machine a number of chances to operate a task
         for i in range(self.__tolerance):
-            if self.__camera_sensor.handDetected():
-                # In case that hands are detected on the board, the machine should stop running
-                print('Hand detected on the board')
-                return False
             input = self.__receive_input()
             if (input is InputType.EMERGENCY_EXIT):
                 self.__alert.alertUser(AlertType.EMERGENCY_EXIT)
@@ -172,9 +193,11 @@ class Controller:
                 return False
             task.execute_next()
             criteria = task.send_criteria()
+            print(criteria)
             state = task.report_state()
             # in case of success
             if self.check_criteria_meet(criteria, state):
+                print('Step executed')
                 return True
         device = task.report_fault_device()
         device.print_instruction()
@@ -188,26 +211,44 @@ class Controller:
 
     def startLoop(self) -> None:
         '''
-        This function starts the loop for the system 
+        This function starts the loop for the system
         '''
         # As soon as the machine is start and ready to run, this function should be called
         while True:
             self.check_battery_condition()
+            if self.power_left == 0:
+                print('runs out of power')
+                break
+            self.power_left -= .02
             input_type = self.__receive_input()
             if input_type is InputType.SHUT_DOWN:
                 self.__alert.alertUser(AlertType.SHUT_DOWN)
                 break
             if input_type is InputType.EMERGENCY_EXIT:
                 self.__alert.alertUser(AlertType.EMERGENCY_EXIT)
-                break
+                continue
             if input_type is InputType.START_RUNNING:
                 if self.__camera_sensor.isItemOnBoard():
                     # Detect the type of clothing
                     category = self.__camera_sensor.getItemOnBoard()
+                    print(category)
                     if category != ClothingType.OTHER:
+                        print(f'Clothing type of {category} is detected! We are starting folding')
                         self.__create_task(category)
                         self.monitor_the_task()
                     else:
                         self.__alert.alertUser(AlertType.UNKNOWN_CLOTHING)
                 else:
                     self.__alert.alertUser(AlertType.NO_CLOTHING)
+
+    # implementation for the second design
+    # def startLoop2(self):
+    #     while True
+    #         # First we check the battery condition
+    #         self.check_battery_condition()
+    #         if self.power_left == 0:
+    #             print('runs out of power')
+    #             break
+    #         # We detect if there are inputs from the users, like shut down, start running, in this case, emergence exit
+    #         # will not be processed.
+    #         input_type = self.__receive_input()

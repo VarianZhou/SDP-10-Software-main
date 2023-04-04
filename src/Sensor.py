@@ -1,5 +1,6 @@
 
 from InputType import InputType
+import time
 '''The sensor class provides an interface between the monitor system and HW, it is supposed to receive feedbacks from a
 particular device(called sense), and send the feedback data to our monitor so that we can check if it is done successfully.'''
 class Sensor():
@@ -28,7 +29,11 @@ class Motor_Sensor(Sensor):
         # Return the exact angle of a motor
         # for now, it just returns 180 for example, when the sensors are added, it should be able to detect the exact angle
         # of a motor
-        return 180
+        time.sleep(2)
+        if self.name == 'Motor Sensor 4':
+            return 150
+        else:
+            return 100
 
 class Input_Sensor(Sensor):
     def sense(self):

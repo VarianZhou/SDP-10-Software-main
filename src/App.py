@@ -9,13 +9,15 @@ from Controller import Controller
 from StackSensor import StackSensor
 from Sensor import Motor_Sensor
 from Actuator import Motor
+import time
 
 
 def main():
     '''
     This function is the main function to start the system
     '''
-
+    
+    start_time = time.time()
     # camera_sensor = CameraSensor(8)
     # controller = Controller(output, stack_sensor, camera_sensor, panels)
     # controller.startLoop()
@@ -47,26 +49,6 @@ def main():
                           3. Please replace it with a new motor,
                           4. Put the tap back,
                           5. Try to restart the machine.'''
-    msg6 = '''1. Please remove the tap of the machine using a screw driver,
-                          2. Please remove the motor at middle right,
-                          3. Please replace it with a new motor,
-                          4. Put the tap back,
-                          5. Try to restart the machine.'''
-    msg7 = '''1. Please remove the tap of the machine using a screw driver,
-                          2. Please remove the motor at left bottom,
-                          3. Please replace it with a new motor,
-                          4. Put the tap back,
-                          5. Try to restart the machine.'''
-    msg8 = '''1. Please remove the tap of the machine using a screw driver,
-                          2. Please remove the motor at middle bottom,
-                          3. Please replace it with a new motor,
-                          4. Put the tap back,
-                          5. Try to restart the machine.'''
-    msg9 = '''1. Please remove the tap of the machine using a screw driver,
-                          2. Please remove the motor at right bottom,
-                          3. Please replace it with a new motor,
-                          4. Put the tap back,
-                          5. Try to restart the machine.'''
     motor_sensor1 = Motor_Sensor('Motor Sensor 1', msg1, int)
     motor_sensor2 = Motor_Sensor('Motor Sensor 2', msg2, int)
     motor_sensor3 = Motor_Sensor('Motor Sensor 3', msg3, int)
@@ -86,9 +68,13 @@ def main():
 
     controller = Controller(output, stack_sensor, camera, actuators, sensors)
     controller.startLoop()
+    end_time = time.time()
+    print(f'The total running time is "{end_time-start_time}"')
+    #
 
+# Your program code here
 main()
-#
+
 # class App:
 #     def main():
 #         '''
