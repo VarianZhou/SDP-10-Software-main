@@ -5,6 +5,8 @@ Servo east;
 Servo west;
 Servo north;
 Servo centre;
+int up_time = 400;
+int down_time = 500;
 
 void setup()
 {
@@ -12,92 +14,98 @@ void setup()
     south.attach(3);
     east.attach(5);
     west.attach(6);
-    north.attach(9);
-    centre.attach(10);
+    north.attach(10);
+    centre.attach(9);
 
 }
 
-void actuate(Servo servo, double pos)
+
+void up(Servo servo)
 {
-    servo.write(0);
-    delay(750);
-    servo.write(pos);
+  servo.write(0);
 }
 
-void shirt_short()
+void down (Servo servo)
 {
-    actuate(south, 100);
-    actuate(east, 100);
-    actuate(west, 100);
-    actuate(centre, 100);
-    actuate(north, 150);
+  servo.write(75);
 }
 
-void shirt_long()
+void north_up(){
+    north.write(80);
+  }
+
+void north_down(){
+    north.write(0);
+  }
+
+void loop()
 {
-    actuate(south, 100);
-    actuate(east, 100);
-    actuate(west, 100);
-    actuate(east, 100);
-    actuate(west, 100);
-    actuate(centre, 100);
-    actuate(north, 150);
-}
-
-void trousers()
-{
-    actuate(centre, 100);
-    actuate(east, 100);
-    actuate(west, 100);
-    actuate(north, 150);
-}
-
-void loop() {
-  if (Serial.available() > 0) {
-    char usb = Serial.read();
+  down(south);
+  down(centre);
+  down(west);
+  down(east);
+      if (Serial.available() > 0)
+    {
+        char usb = Serial.read();
         if (usb == '1')
         {
-            actuate(south, 100);
+            up(south);
+            delay(up_time);
+
         }
-        else if (usb == '2')
+        if (usb == '2')
         {
-            actuate(east, 100);
+            up(east);
+            delay(up_time);
+
         }
-        else if (usb == '3')
+        if (usb == '3')
         {
-            actuate(west, 100);
+            up(west);
+            delay(up_time);
+
         }
-        else if (usb == '4')
+        if (usb == '4')
         {
-            actuate(north, 100);
+            north_up();
+            delay(500);
+
         }
-        else if (usb == '5')
+        if (usb == '5')
         {
-            actuate(centre, 100);
+            down(centre);
+            delay(up_time);
+
         }
-        else if (usb == '6')
+        if (usb == '6')
         {
-            actuate(north, 150);
+            down(south);
+            delay(down_time);
+
         }
-        else if (usb == '7')
+        if (usb == '7')
         {
-            actuate(south, 0);
+            down(east);
+            delay(down_time);
+
         }
-        else if (usb == '8')
+        if (usb == '8')
         {
-            actuate(east, 0);
+            down(west);
+            delay(down_time);
+
         }
-        else if (usb == '9')
+        if (usb == '9')
         {
-            actuate(west, 0);
+            north_down();
+            delay(750);
+
         }
-        else if (usb == 'a')
+        if (usb == 'a')
         {
-            actuate(north, 0);
+            down(centre);
+            delay(down_time);
+
         }
-        else if (usb == 'b')
-        {
-            actuate(centre, 0);
-        }
-  }
+    }
 }

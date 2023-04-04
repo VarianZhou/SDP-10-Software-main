@@ -3,6 +3,8 @@ Program: Actuator Class
 Author: Hongliang Zhou
 Date: 18th March 2023
 """
+import time
+
 import serial
 class Actuator():
     '''
@@ -27,7 +29,7 @@ class Actuator():
         return True
 
 class Motor(Actuator):
-    def __init__(self,name:str, id:int, port = '/dev/ttyAcM0', baud_rate = 9600):
+    def __init__(self,name:str, id:int, port = '/dev/ttyACM0', baud_rate = 9600):
         super().__init__(name,id)
         self.__state = 0
         self.__initial_state = 0
@@ -37,11 +39,16 @@ class Motor(Actuator):
 
     def execute(self, angle):
         msg = self.getId()
+        print(self.getId())
         if angle == 0:
-            msg+=5
+            msg += 5
         if msg == 10:
             msg = 'a'
-        self.ser.write(chr(msg))
+        else:
+            msg = str(msg)[0]
+        print(msg)
+        self.ser.write(msg.encode())
+        time.sleep(2)
         self.__state = angle
         return True
 
